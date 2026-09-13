@@ -2,122 +2,52 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
   <title>Bubble Shooter - 無限模式</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
     body {
       background: linear-gradient(180deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      overflow: hidden;
-      color: #fff;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: system-ui, sans-serif; overflow: hidden; color: #fff;
     }
     #game-container {
       position: relative;
-      box-shadow: 0 0 40px rgba(100, 80, 255, 0.3), 0 0 80px rgba(50, 30, 150, 0.2);
-      border-radius: 12px;
-      overflow: hidden;
+      box-shadow: 0 0 40px rgba(100, 80, 255, 0.3);
+      border-radius: 12px; overflow: hidden;
       border: 2px solid rgba(140, 120, 255, 0.4);
     }
-    canvas {
-      display: block;
-      background: linear-gradient(180deg, #0d1229 0%, #151a35 100%);
-      cursor: crosshair;
-    }
+    canvas { display: block; background: linear-gradient(180deg, #0d1229 0%, #151a35 100%); touch-action: none; }
     #ui {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 12px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 10;
+      position: absolute; top: 0; left: 0; right: 0; padding: 10px 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 100%);
+      pointer-events: none; z-index: 10; font-size: 16px; font-weight: 600;
+      text-shadow: 0 1px 4px #000;
     }
-    .score-box, .best-box {
-      font-size: 18px;
-      font-weight: 600;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-    }
-    .score-box span, .best-box span {
-      color: #ffd700;
-    }
+    #ui span { color: #ffd700; }
     #overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      backdrop-filter: blur(4px);
+      position: absolute; inset: 0; background: rgba(0,0,0,0.78);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 20; backdrop-filter: blur(3px);
     }
-    #overlay.hidden {
-      display: none;
-    }
+    #overlay.hidden { display: none; }
     #overlay h1 {
-      font-size: 42px;
-      margin-bottom: 8px;
+      font-size: 36px; margin-bottom: 6px;
       background: linear-gradient(135deg, #ff6b9d, #c44dff, #6b8cff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: none;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    #overlay p {
-      font-size: 16px;
-      color: #aaa;
-      margin-bottom: 24px;
-    }
-    #overlay .final-score {
-      font-size: 28px;
-      margin-bottom: 28px;
-      color: #ffd700;
-    }
+    #overlay p { font-size: 15px; color: #aaa; margin-bottom: 20px; }
+    #overlay .final-score { font-size: 26px; margin-bottom: 24px; color: #ffd700; }
     button {
-      padding: 14px 40px;
-      font-size: 18px;
-      font-weight: 600;
-      border: none;
-      border-radius: 50px;
-      background: linear-gradient(135deg, #7b5cff, #c44dff);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(123, 92, 255, 0.5);
-      transition: transform 0.15s, box-shadow 0.15s;
-      pointer-events: auto;
-    }
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 28px rgba(123, 92, 255, 0.7);
-    }
-    button:active {
-      transform: scale(0.98);
+      padding: 12px 36px; font-size: 17px; font-weight: 600; border: none;
+      border-radius: 50px; background: linear-gradient(135deg, #7b5cff, #c44dff);
+      color: white; cursor: pointer; box-shadow: 0 4px 18px rgba(123, 92, 255, 0.5);
     }
     #hint {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
-      pointer-events: none;
-      z-index: 5;
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; color: rgba(255,255,255,0.35); pointer-events: none; z-index: 5;
     }
   </style>
 </head>
@@ -125,609 +55,491 @@
   <div id="game-container">
     <canvas id="game"></canvas>
     <div id="ui">
-      <div class="score-box">分數：<span id="score">0</span></div>
-      <div class="best-box">最高：<span id="best">0</span></div>
+      <div>分數：<span id="score">0</span></div>
+      <div>最高：<span id="best">0</span></div>
     </div>
     <div id="overlay">
       <h1>Bubble Shooter</h1>
       <p>無限模式 · 消除泡泡直到碰到底部</p>
       <button id="start-btn">開始遊戲</button>
     </div>
-    <div id="hint">移動滑鼠瞄準 · 點擊或空白鍵發射</div>
+    <div id="hint">拖曳瞄準 · 放開發射</div>
   </div>
 
-  <script>
-    // ============== 常數與設定 ==============
-    const COLORS = [
-      '#ff4d6d', // 紅
-      '#4d9fff', // 藍
-      '#4dff88', // 綠
-      '#ffd84d', // 黃
-      '#c44dff', // 紫
-      '#ff8c4d', // 橙
-    ];
-    const ROWS = 12;
-    const COLS = 11;
-    const BUBBLE_RADIUS = 18;
-    const ROW_HEIGHT = BUBBLE_RADIUS * Math.sqrt(3);
-    const SHOOTER_Y_OFFSET = 55;
-    const DROP_SPEED = 0.8;       // 每幀往下推的像素（無限模式）
-    const DROP_INTERVAL = 2800;   // 毫秒，每多久加一排（可調）
-    const MATCH_MIN = 3;
+<script>
+(function () {
+  const COLORS = ['#ff4d6d', '#4d9fff', '#4dff88', '#ffd84d', '#c44dff', '#ff8c4d'];
+  const COLS = 10;
+  const R = 16;                 // bubble radius
+  const ROW_H = R * Math.sqrt(3);
+  const MATCH_MIN = 3;
+  const DROP_MS = 3200;
 
-    // ============== 狀態 ==============
-    let canvas, ctx;
-    let width, height;
-    let grid = [];          // grid[row][col] = colorIndex 或 null
-    let shooterAngle = -Math.PI / 2;
-    let currentBubble = null;
-    let nextBubble = null;
-    let flying = null;      // {x,y,vx,vy,color}
-    let score = 0;
-    let best = parseInt(localStorage.getItem('bubbleBest') || '0');
-    let gameOver = false;
-    let running = false;
-    let lastDropTime = 0;
-    let particles = [];
-    let animId = null;
+  let canvas, ctx, W, H;
+  let grid = [];                // grid[row][col] = color index or -1
+  let angle = -Math.PI / 2;
+  let curColor = 0, nextColor = 1;
+  let flying = null;            // {x,y,vx,vy,color}
+  let score = 0, best = 0;
+  let running = false, gameOver = false;
+  let lastDrop = 0;
+  let particles = [];
+  let animId = 0;
+  let pointerDown = false;
 
-    // ============== 初始化 ==============
-    function init() {
-      canvas = document.getElementById('game');
-      ctx = canvas.getContext('2d');
-      resize();
-      window.addEventListener('resize', resize);
-      canvas.addEventListener('mousemove', onMouseMove);
-      canvas.addEventListener('click', onClick);
-      canvas.addEventListener('touchstart', onTouch, { passive: false });
-      canvas.addEventListener('touchmove', onTouch, { passive: false });
-      document.addEventListener('keydown', e => {
-        if (e.code === 'Space') {
-          e.preventDefault();
-          shoot();
+  try { best = parseInt(localStorage.getItem('bs_best') || '0'); } catch (e) {}
+
+  function init() {
+    canvas = document.getElementById('game');
+    ctx = canvas.getContext('2d');
+    resize();
+    window.addEventListener('resize', resize);
+
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointercancel', onUp);
+
+    document.getElementById('start-btn').addEventListener('click', startGame);
+    document.getElementById('best').textContent = best;
+  }
+
+  function resize() {
+    const maxW = Math.min(window.innerWidth - 16, 400);
+    const maxH = Math.min(window.innerHeight - 30, 680);
+    W = maxW; H = maxH;
+    canvas.width = W; canvas.height = H;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+  }
+
+  function startGame() {
+    document.getElementById('overlay').classList.add('hidden');
+    grid = [];
+    for (let r = 0; r < 6; r++) {
+      const cols = colsInRow(r);
+      const row = [];
+      for (let c = 0; c < cols; c++) row.push(Math.floor(Math.random() * COLORS.length));
+      grid.push(row);
+    }
+    score = 0;
+    gameOver = false;
+    running = true;
+    flying = null;
+    particles = [];
+    lastDrop = performance.now();
+    curColor = Math.floor(Math.random() * COLORS.length);
+    nextColor = Math.floor(Math.random() * COLORS.length);
+    updateScore();
+    if (animId) cancelAnimationFrame(animId);
+    loop(performance.now());
+  }
+
+  function colsInRow(r) {
+    return (r % 2 === 0) ? COLS : COLS - 1;
+  }
+
+  function posOf(r, c) {
+    const offset = (r % 2 === 1) ? R : 0;
+    const totalW = COLS * R * 2;
+    const startX = (W - totalW) / 2 + R;
+    return {
+      x: startX + offset + c * R * 2,
+      y: 48 + r * ROW_H + R
+    };
+  }
+
+  // ---------- input ----------
+  function aimFromEvent(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top) * (H / rect.height);
+    const sx = W / 2;
+    const sy = H - 50;
+    let a = Math.atan2(my - sy, mx - sx);
+    if (a > -0.2) a = -0.2;
+    if (a < -Math.PI + 0.2) a = -Math.PI + 0.2;
+    angle = a;
+  }
+
+  function onDown(e) {
+    e.preventDefault();
+    if (!running || gameOver) return;
+    pointerDown = true;
+    aimFromEvent(e);
+    try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+  }
+  function onMove(e) {
+    e.preventDefault();
+    if (!pointerDown || !running || gameOver) return;
+    aimFromEvent(e);
+  }
+  function onUp(e) {
+    e.preventDefault();
+    if (!pointerDown) return;
+    pointerDown = false;
+    if (running && !gameOver && !flying) shoot();
+  }
+
+  function shoot() {
+    if (flying) return;
+    const speed = 11;
+    const sx = W / 2, sy = H - 50;
+    flying = {
+      x: sx, y: sy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      color: curColor
+    };
+    curColor = nextColor;
+    nextColor = Math.floor(Math.random() * COLORS.length);
+  }
+
+  // ---------- physics ----------
+  function updateFlying() {
+    if (!flying) return;
+    flying.x += flying.vx;
+    flying.y += flying.vy;
+
+    // walls
+    if (flying.x < R + 4) { flying.x = R + 4; flying.vx *= -1; }
+    if (flying.x > W - R - 4) { flying.x = W - R - 4; flying.vx *= -1; }
+
+    // ceiling
+    if (flying.y < 40 + R) {
+      placeBubble(flying.x, flying.y, flying.color);
+      flying = null;
+      return;
+    }
+
+    // collide with existing
+    for (let r = 0; r < grid.length; r++) {
+      for (let c = 0; c < grid[r].length; c++) {
+        if (grid[r][c] < 0) continue;
+        const p = posOf(r, c);
+        const d = Math.hypot(p.x - flying.x, p.y - flying.y);
+        if (d < R * 1.9) {
+          placeBubble(flying.x, flying.y, flying.color);
+          flying = null;
+          return;
         }
-      });
-      document.getElementById('start-btn').addEventListener('click', startGame);
+      }
+    }
+  }
+
+  function placeBubble(x, y, color) {
+    // find nearest empty slot
+    let bestR = -1, bestC = -1, bestD = 1e9;
+    const maxR = grid.length + 3;
+
+    for (let r = 0; r < maxR; r++) {
+      // ensure row exists
+      while (grid.length <= r) {
+        const row = [];
+        const n = colsInRow(grid.length);
+        for (let i = 0; i < n; i++) row.push(-1);
+        grid.push(row);
+      }
+      const n = colsInRow(r);
+      for (let c = 0; c < n; c++) {
+        if (grid[r][c] >= 0) continue;
+        const p = posOf(r, c);
+        const d = Math.hypot(p.x - x, p.y - y);
+        if (d < bestD) {
+          bestD = d;
+          bestR = r;
+          bestC = c;
+        }
+      }
+    }
+
+    if (bestR < 0) return;
+
+    // ensure
+    while (grid.length <= bestR) {
+      const row = [];
+      const n = colsInRow(grid.length);
+      for (let i = 0; i < n; i++) row.push(-1);
+      grid.push(row);
+    }
+    if (bestC >= grid[bestR].length) return;
+
+    grid[bestR][bestC] = color;
+
+    // match
+    const matched = findGroup(bestR, bestC);
+    if (matched.length >= MATCH_MIN) {
+      for (const { r, c } of matched) {
+        const p = posOf(r, c);
+        spawnParticles(p.x, p.y, COLORS[grid[r][c]]);
+        grid[r][c] = -1;
+      }
+      score += matched.length * 10 + Math.max(0, matched.length - 3) * 15;
+      dropFloating();
+      updateScore();
+    }
+
+    checkGameOver();
+  }
+
+  function findGroup(sr, sc) {
+    if (sr < 0 || sr >= grid.length || sc < 0 || sc >= grid[sr].length) return [];
+    const color = grid[sr][sc];
+    if (color < 0) return [];
+    const visited = new Set();
+    const result = [];
+    const stack = [[sr, sc]];
+    const key = (r, c) => r + ',' + c;
+
+    while (stack.length) {
+      const [r, c] = stack.pop();
+      const k = key(r, c);
+      if (visited.has(k)) continue;
+      visited.add(k);
+      if (r < 0 || r >= grid.length || c < 0 || c >= grid[r].length) continue;
+      if (grid[r][c] !== color) continue;
+      result.push({ r, c });
+      for (const [nr, nc] of neighbors(r, c)) {
+        if (!visited.has(key(nr, nc))) stack.push([nr, nc]);
+      }
+    }
+    return result;
+  }
+
+  function neighbors(r, c) {
+    const odd = r % 2 === 1;
+    const dirs = odd
+      ? [[-1,0],[-1,1],[0,-1],[0,1],[1,0],[1,1]]
+      : [[-1,-1],[-1,0],[0,-1],[0,1],[1,-1],[1,0]];
+    return dirs.map(([dr, dc]) => [r + dr, c + dc]);
+  }
+
+  function dropFloating() {
+    const connected = new Set();
+    const key = (r, c) => r + ',' + c;
+    const q = [];
+
+    if (grid.length > 0) {
+      for (let c = 0; c < grid[0].length; c++) {
+        if (grid[0][c] >= 0) {
+          q.push([0, c]);
+          connected.add(key(0, c));
+        }
+      }
+    }
+    while (q.length) {
+      const [r, c] = q.shift();
+      for (const [nr, nc] of neighbors(r, c)) {
+        if (nr < 0 || nr >= grid.length || nc < 0 || nc >= grid[nr].length) continue;
+        if (grid[nr][nc] < 0) continue;
+        const k = key(nr, nc);
+        if (connected.has(k)) continue;
+        connected.add(k);
+        q.push([nr, nc]);
+      }
+    }
+
+    let count = 0;
+    for (let r = 0; r < grid.length; r++) {
+      for (let c = 0; c < grid[r].length; c++) {
+        if (grid[r][c] >= 0 && !connected.has(key(r, c))) {
+          const p = posOf(r, c);
+          spawnParticles(p.x, p.y, COLORS[grid[r][c]]);
+          grid[r][c] = -1;
+          count++;
+        }
+      }
+    }
+    if (count > 0) {
+      score += count * 20;
+      updateScore();
+    }
+  }
+
+  function checkGameOver() {
+    const danger = H - 50 - R * 3;
+    for (let r = 0; r < grid.length; r++) {
+      for (let c = 0; c < grid[r].length; c++) {
+        if (grid[r][c] < 0) continue;
+        const p = posOf(r, c);
+        if (p.y + R > danger) {
+          endGame();
+          return;
+        }
+      }
+    }
+  }
+
+  function endGame() {
+    gameOver = true;
+    running = false;
+    if (score > best) {
+      best = score;
+      try { localStorage.setItem('bs_best', best); } catch (e) {}
       document.getElementById('best').textContent = best;
     }
+    const ov = document.getElementById('overlay');
+    ov.classList.remove('hidden');
+    ov.innerHTML = `
+      <h1>遊戲結束</h1>
+      <div class="final-score">分數：${score}</div>
+      <p>${score >= best && score > 0 ? '新紀錄！' : '再接再厲！'}</p>
+      <button id="start-btn">再玩一次</button>
+    `;
+    document.getElementById('start-btn').addEventListener('click', startGame);
+  }
 
-    function resize() {
-      const maxW = Math.min(window.innerWidth - 20, 440);
-      const maxH = Math.min(window.innerHeight - 40, 720);
-      width = maxW;
-      height = maxH;
-      canvas.width = width;
-      canvas.height = height;
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
+  // ---------- infinite drop ----------
+  function maybeDrop(now) {
+    if (now - lastDrop < DROP_MS) return;
+    lastDrop = now;
+
+    // shift everything down by inserting new top row
+    const newRow = [];
+    for (let c = 0; c < COLS; c++) {
+      newRow.push(Math.random() < 0.12 ? -1 : Math.floor(Math.random() * COLORS.length));
     }
-
-    // ============== 遊戲開始 ==============
-    function startGame() {
-      document.getElementById('overlay').classList.add('hidden');
-      grid = [];
-      for (let r = 0; r < ROWS; r++) {
-        const row = [];
-        const cols = (r % 2 === 0) ? COLS : COLS - 1;
-        for (let c = 0; c < cols; c++) {
-          // 初始只填前幾排
-          if (r < 5) {
-            row.push(Math.floor(Math.random() * COLORS.length));
-          } else {
-            row.push(null);
-          }
-        }
-        grid.push(row);
+    const old = grid.map(row => row.slice());
+    grid = [newRow];
+    for (let r = 0; r < old.length; r++) {
+      const n = colsInRow(r + 1);
+      const row = [];
+      for (let c = 0; c < n; c++) {
+        row.push(c < old[r].length ? old[r][c] : -1);
       }
-      score = 0;
-      gameOver = false;
-      running = true;
-      lastDropTime = performance.now();
-      particles = [];
-      flying = null;
-      currentBubble = randomColor();
-      nextBubble = randomColor();
-      updateScore();
-      if (animId) cancelAnimationFrame(animId);
-      loop(performance.now());
+      grid.push(row);
     }
+    // trim empty bottom
+    while (grid.length > 1 && grid[grid.length - 1].every(v => v < 0)) grid.pop();
+    checkGameOver();
+  }
 
-    function randomColor() {
-      return Math.floor(Math.random() * COLORS.length);
-    }
-
-    // ============== 座標轉換 ==============
-    function getBubblePos(row, col) {
-      const offsetX = (row % 2 === 1) ? BUBBLE_RADIUS : 0;
-      // 水平置中
-      const totalW = COLS * BUBBLE_RADIUS * 2;
-      const startX = (width - totalW) / 2 + BUBBLE_RADIUS;
-      const x = startX + offsetX + col * (BUBBLE_RADIUS * 2);
-      const y = row * ROW_HEIGHT + BUBBLE_RADIUS + 50;
-      return { x, y };
-    }
-
-    function getGridCoords(x, y) {
-      // 粗略找最近格子
-      let bestR = -1, bestC = -1, bestDist = Infinity;
-      for (let r = 0; r < grid.length; r++) {
-        const cols = grid[r].length;
-        for (let c = 0; c < cols; c++) {
-          const pos = getBubblePos(r, c);
-          const d = Math.hypot(pos.x - x, pos.y - y);
-          if (d < bestDist) {
-            bestDist = d;
-            bestR = r;
-            bestC = c;
-          }
-        }
-      }
-      return { row: bestR, col: bestC, dist: bestDist };
-    }
-
-    // ============== 輸入 ==============
-    function onMouseMove(e) {
-      if (!running || gameOver) return;
-      const rect = canvas.getBoundingClientRect();
-      const mx = e.clientX - rect.left;
-      const my = e.clientY - rect.top;
-      const sx = width / 2;
-      const sy = height - SHOOTER_Y_OFFSET;
-      shooterAngle = Math.atan2(my - sy, mx - sx);
-      // 限制角度，不要太水平
-      const minA = -Math.PI + 0.25;
-      const maxA = -0.25;
-      if (shooterAngle > maxA) shooterAngle = maxA;
-      if (shooterAngle < minA) shooterAngle = minA;
-    }
-
-    function onClick() {
-      shoot();
-    }
-
-    function onTouch(e) {
-      e.preventDefault();
-      if (!running || gameOver) return;
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const mx = touch.clientX - rect.left;
-      const my = touch.clientY - rect.top;
-      const sx = width / 2;
-      const sy = height - SHOOTER_Y_OFFSET;
-      shooterAngle = Math.atan2(my - sy, mx - sx);
-      const minA = -Math.PI + 0.25;
-      const maxA = -0.25;
-      if (shooterAngle > maxA) shooterAngle = maxA;
-      if (shooterAngle < minA) shooterAngle = minA;
-      if (e.type === 'touchstart') shoot();
-    }
-
-    function shoot() {
-      if (!running || gameOver || flying) return;
-      const speed = 12;
-      const sx = width / 2;
-      const sy = height - SHOOTER_Y_OFFSET;
-      flying = {
-        x: sx,
-        y: sy,
-        vx: Math.cos(shooterAngle) * speed,
-        vy: Math.sin(shooterAngle) * speed,
-        color: currentBubble
-      };
-      currentBubble = nextBubble;
-      nextBubble = randomColor();
-    }
-
-    // ============== 物理與碰撞 ==============
-    function updateFlying() {
-      if (!flying) return;
-      flying.x += flying.vx;
-      flying.y += flying.vy;
-
-      // 左右牆壁反彈
-      const margin = 6;
-      if (flying.x - BUBBLE_RADIUS < margin) {
-        flying.x = BUBBLE_RADIUS + margin;
-        flying.vx *= -1;
-      }
-      if (flying.x + BUBBLE_RADIUS > width - margin) {
-        flying.x = width - BUBBLE_RADIUS - margin;
-        flying.vx *= -1;
-      }
-
-      // 碰到頂部
-      if (flying.y - BUBBLE_RADIUS < 40) {
-        snapBubble(flying.x, flying.y, flying.color);
-        flying = null;
-        return;
-      }
-
-      // 與現有泡泡碰撞
-      for (let r = 0; r < grid.length; r++) {
-        for (let c = 0; c < grid[r].length; c++) {
-          if (grid[r][c] === null) continue;
-          const pos = getBubblePos(r, c);
-          const dist = Math.hypot(pos.x - flying.x, pos.y - flying.y);
-          if (dist < BUBBLE_RADIUS * 1.85) {
-            snapBubble(flying.x, flying.y, flying.color);
-            flying = null;
-            return;
-          }
-        }
-      }
-    }
-
-    function snapBubble(x, y, color) {
-      // 找最近空位
-      let bestR = -1, bestC = -1, bestDist = Infinity;
-      // 也要考慮可能需要新增一排
-      for (let r = 0; r < grid.length + 2; r++) {
-        const cols = (r % 2 === 0) ? COLS : COLS - 1;
-        if (r >= grid.length) {
-          // 擴展 grid
-          while (grid.length <= r) {
-            const newRow = [];
-            const nc = (grid.length % 2 === 0) ? COLS : COLS - 1;
-            for (let i = 0; i < nc; i++) newRow.push(null);
-            grid.push(newRow);
-          }
-        }
-        for (let c = 0; c < cols; c++) {
-          if (grid[r][c] !== null) continue;
-          const pos = getBubblePos(r, c);
-          const d = Math.hypot(pos.x - x, pos.y - y);
-          if (d < bestDist) {
-            bestDist = d;
-            bestR = r;
-            bestC = c;
-          }
-        }
-      }
-      if (bestR >= 0) {
-        // 確保該列存在
-        while (grid.length <= bestR) {
-          const newRow = [];
-          const nc = (grid.length % 2 === 0) ? COLS : COLS - 1;
-          for (let i = 0; i < nc; i++) newRow.push(null);
-          grid.push(newRow);
-        }
-        if (bestC < grid[bestR].length) {
-          grid[bestR][bestC] = color;
-        }
-      }
-      // 消除檢查
-      const matched = findMatches(bestR, bestC);
-      if (matched.length >= MATCH_MIN) {
-        removeBubbles(matched);
-        // 掉落懸空
-        dropFloating();
-        // 加分
-        const points = matched.length * 10 + (matched.length > 3 ? (matched.length - 3) * 15 : 0);
-        score += points;
-        updateScore();
-        // 粒子
-        matched.forEach(({ r, c }) => {
-          const pos = getBubblePos(r, c);
-          spawnParticles(pos.x, pos.y, COLORS[color]);
-        });
-      }
-      checkGameOver();
-    }
-
-    function findMatches(startR, startC) {
-      const color = grid[startR][startC];
-      if (color === null) return [];
-      const visited = new Set();
-      const result = [];
-      const stack = [[startR, startC]];
-      const key = (r, c) => r + ',' + c;
-
-      while (stack.length) {
-        const [r, c] = stack.pop();
-        const k = key(r, c);
-        if (visited.has(k)) continue;
-        visited.add(k);
-        if (r < 0 || r >= grid.length || c < 0 || c >= grid[r].length) continue;
-        if (grid[r][c] !== color) continue;
-        result.push({ r, c });
-        // 六邊形鄰居
-        getNeighbors(r, c).forEach(([nr, nc]) => {
-          if (!visited.has(key(nr, nc))) stack.push([nr, nc]);
-        });
-      }
-      return result;
-    }
-
-    function getNeighbors(r, c) {
-      const odd = r % 2 === 1;
-      const dirs = odd
-        ? [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, 0], [1, 1]]
-        : [[-1, -1], [-1, 0], [0, -1], [0, 1], [1, -1], [1, 0]];
-      return dirs.map(([dr, dc]) => [r + dr, c + dc]);
-    }
-
-    function removeBubbles(list) {
-      list.forEach(({ r, c }) => {
-        if (grid[r] && c < grid[r].length) grid[r][c] = null;
+  // ---------- particles ----------
+  function spawnParticles(x, y, color) {
+    for (let i = 0; i < 6; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const s = 1 + Math.random() * 2.5;
+      particles.push({
+        x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s,
+        life: 1, color, size: 2 + Math.random() * 3
       });
     }
+  }
+  function updateParticles() {
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.life -= 0.035;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+  }
 
-    function dropFloating() {
-      // 從頂部開始 BFS，標記連接到頂部的泡泡
-      const connected = new Set();
-      const key = (r, c) => r + ',' + c;
-      const queue = [];
-      // 第一排全部是「連接到頂部」
-      if (grid.length > 0) {
-        for (let c = 0; c < grid[0].length; c++) {
-          if (grid[0][c] !== null) {
-            queue.push([0, c]);
-            connected.add(key(0, c));
-          }
-        }
-      }
-      while (queue.length) {
-        const [r, c] = queue.shift();
-        getNeighbors(r, c).forEach(([nr, nc]) => {
-          if (nr < 0 || nr >= grid.length || nc < 0 || nc >= grid[nr].length) return;
-          if (grid[nr][nc] === null) return;
-          const k = key(nr, nc);
-          if (connected.has(k)) return;
-          connected.add(k);
-          queue.push([nr, nc]);
-        });
-      }
-      // 沒連到頂部的全部消除並加分
-      let floatingCount = 0;
-      for (let r = 0; r < grid.length; r++) {
-        for (let c = 0; c < grid[r].length; c++) {
-          if (grid[r][c] !== null && !connected.has(key(r, c))) {
-            const pos = getBubblePos(r, c);
-            spawnParticles(pos.x, pos.y, COLORS[grid[r][c]]);
-            grid[r][c] = null;
-            floatingCount++;
-          }
-        }
-      }
-      if (floatingCount > 0) {
-        score += floatingCount * 20;
-        updateScore();
+  // ---------- draw ----------
+  function drawBubble(x, y, color, scale) {
+    scale = scale || 1;
+    const rad = R * scale;
+    const g = ctx.createRadialGradient(x - rad * 0.3, y - rad * 0.3, rad * 0.1, x, y, rad);
+    g.addColorStop(0, lighten(color, 45));
+    g.addColorStop(0.65, color);
+    g.addColorStop(1, darken(color, 30));
+    ctx.beginPath();
+    ctx.arc(x, y, rad, 0, Math.PI * 2);
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x - rad * 0.28, y - rad * 0.32, rad * 0.25, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fill();
+  }
+
+  function lighten(hex, p) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = Math.min(255, (n >> 16) + p);
+    const g = Math.min(255, ((n >> 8) & 255) + p);
+    const b = Math.min(255, (n & 255) + p);
+    return `rgb(${r},${g},${b})`;
+  }
+  function darken(hex, p) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = Math.max(0, (n >> 16) - p);
+    const g = Math.max(0, ((n >> 8) & 255) - p);
+    const b = Math.max(0, (n & 255) - p);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // bubbles
+    for (let r = 0; r < grid.length; r++) {
+      for (let c = 0; c < grid[r].length; c++) {
+        if (grid[r][c] < 0) continue;
+        const p = posOf(r, c);
+        drawBubble(p.x, p.y, COLORS[grid[r][c]]);
       }
     }
 
-    function checkGameOver() {
-      // 任何泡泡太靠近發射器就結束
-      const dangerY = height - SHOOTER_Y_OFFSET - BUBBLE_RADIUS * 2.5;
-      for (let r = 0; r < grid.length; r++) {
-        for (let c = 0; c < grid[r].length; c++) {
-          if (grid[r][c] === null) continue;
-          const pos = getBubblePos(r, c);
-          if (pos.y + BUBBLE_RADIUS > dangerY) {
-            endGame();
-            return;
-          }
-        }
-      }
-    }
+    if (flying) drawBubble(flying.x, flying.y, COLORS[flying.color]);
 
-    function endGame() {
-      gameOver = true;
-      running = false;
-      if (score > best) {
-        best = score;
-        localStorage.setItem('bubbleBest', best);
-        document.getElementById('best').textContent = best;
-      }
-      const overlay = document.getElementById('overlay');
-      overlay.classList.remove('hidden');
-      overlay.innerHTML = `
-        <h1>遊戲結束</h1>
-        <div class="final-score">分數：${score}</div>
-        <p>${score >= best && score > 0 ? '新紀錄！' : '再接再厲！'}</p>
-        <button id="start-btn">再玩一次</button>
-      `;
-      document.getElementById('start-btn').addEventListener('click', startGame);
-    }
-
-    // ============== 無限模式：往下推 ==============
-    function dropRows(now) {
-      if (now - lastDropTime < DROP_INTERVAL) return;
-      lastDropTime = now;
-
-      // 第 0 排永遠是偶數排（COLS 個）
-      const newRow = [];
-      for (let c = 0; c < COLS; c++) {
-        if (Math.random() < 0.12) newRow.push(null);
-        else newRow.push(Math.floor(Math.random() * COLORS.length));
-      }
-
-      // 把舊的每一排往下移一格，並重新計算奇偶長度
-      const oldGrid = grid.map(row => [...row]);
-      grid = [newRow];
-
-      for (let r = 0; r < oldGrid.length; r++) {
-        const targetCols = ((r + 1) % 2 === 0) ? COLS : COLS - 1;
-        const row = [];
-        // 舊排的奇偶與新排相反，簡單對齊左邊
-        for (let c = 0; c < targetCols; c++) {
-          if (c < oldGrid[r].length) {
-            row.push(oldGrid[r][c]);
-          } else {
-            row.push(null);
-          }
-        }
-        grid.push(row);
-      }
-
-      // 清理底部全空的排
-      while (grid.length > 1) {
-        const last = grid[grid.length - 1];
-        if (last.every(v => v === null)) grid.pop();
-        else break;
-      }
-      checkGameOver();
-    }
-
-    // ============== 粒子效果 ==============
-    function spawnParticles(x, y, color) {
-      for (let i = 0; i < 8; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 1 + Math.random() * 3;
-        particles.push({
-          x, y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 1,
-          color,
-          size: 3 + Math.random() * 4
-        });
-      }
-    }
-
-    function updateParticles() {
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.08;
-        p.life -= 0.03;
-        if (p.life <= 0) particles.splice(i, 1);
-      }
-    }
-
-    // ============== 繪製 ==============
-    function draw() {
-      ctx.clearRect(0, 0, width, height);
-
-      // 背景網格微光
-      ctx.strokeStyle = 'rgba(100, 80, 200, 0.06)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-
-      // 泡泡
-      for (let r = 0; r < grid.length; r++) {
-        for (let c = 0; c < grid[r].length; c++) {
-          if (grid[r][c] === null) continue;
-          const pos = getBubblePos(r, c);
-          drawBubble(pos.x, pos.y, COLORS[grid[r][c]]);
-        }
-      }
-
-      // 飛行中的泡泡
-      if (flying) {
-        drawBubble(flying.x, flying.y, COLORS[flying.color]);
-      }
-
-      // 發射器與瞄準線
-      const sx = width / 2;
-      const sy = height - SHOOTER_Y_OFFSET;
-      // 瞄準線
-      if (running && !gameOver && !flying) {
-        ctx.beginPath();
-        ctx.setLineDash([6, 8]);
-        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-        ctx.lineWidth = 2;
-        ctx.moveTo(sx, sy);
-        const aimLen = 180;
-        ctx.lineTo(sx + Math.cos(shooterAngle) * aimLen, sy + Math.sin(shooterAngle) * aimLen);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-      // 發射座
+    // shooter
+    const sx = W / 2, sy = H - 50;
+    if (running && !gameOver && !flying) {
       ctx.beginPath();
-      ctx.arc(sx, sy + 8, 28, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(40, 30, 80, 0.9)';
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(140, 120, 255, 0.6)';
+      ctx.setLineDash([5, 7]);
+      ctx.strokeStyle = 'rgba(255,255,255,0.22)';
       ctx.lineWidth = 2;
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(sx + Math.cos(angle) * 160, sy + Math.sin(angle) * 160);
       ctx.stroke();
-
-      // 當前泡泡
-      if (currentBubble !== null) {
-        drawBubble(sx, sy, COLORS[currentBubble], 0.95);
-      }
-      // 下一個
-      if (nextBubble !== null) {
-        drawBubble(sx + 55, sy + 5, COLORS[nextBubble], 0.7);
-        ctx.fillStyle = 'rgba(255,255,255,0.4)';
-        ctx.font = '11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('下一個', sx + 55, sy + 28);
-      }
-
-      // 粒子
-      particles.forEach(p => {
-        ctx.globalAlpha = p.life;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.fill();
-      });
-      ctx.globalAlpha = 1;
+      ctx.setLineDash([]);
     }
+    ctx.beginPath();
+    ctx.arc(sx, sy + 6, 24, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(35,25,70,0.9)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(140,120,255,0.5)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
-    function drawBubble(x, y, color, scale = 1) {
-      const r = BUBBLE_RADIUS * scale;
-      // 主體
-      const grad = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r);
-      grad.addColorStop(0, lighten(color, 40));
-      grad.addColorStop(0.7, color);
-      grad.addColorStop(1, darken(color, 25));
+    drawBubble(sx, sy, COLORS[curColor], 0.95);
+    drawBubble(sx + 48, sy + 4, COLORS[nextColor], 0.65);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('下一個', sx + 48, sy + 26);
+
+    // particles
+    for (const p of particles) {
+      ctx.globalAlpha = Math.max(0, p.life);
       ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
       ctx.fill();
-      // 高光
-      ctx.beginPath();
-      ctx.arc(x - r * 0.3, y - r * 0.35, r * 0.28, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.45)';
-      ctx.fill();
-      // 外框
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
     }
+    ctx.globalAlpha = 1;
+  }
 
-    function lighten(hex, percent) {
-      const num = parseInt(hex.slice(1), 16);
-      const r = Math.min(255, (num >> 16) + percent);
-      const g = Math.min(255, ((num >> 8) & 0xff) + percent);
-      const b = Math.min(255, (num & 0xff) + percent);
-      return `rgb(${r},${g},${b})`;
-    }
-    function darken(hex, percent) {
-      const num = parseInt(hex.slice(1), 16);
-      const r = Math.max(0, (num >> 16) - percent);
-      const g = Math.max(0, ((num >> 8) & 0xff) - percent);
-      const b = Math.max(0, (num & 0xff) - percent);
-      return `rgb(${r},${g},${b})`;
-    }
+  function updateScore() {
+    document.getElementById('score').textContent = score;
+  }
 
-    function updateScore() {
-      document.getElementById('score').textContent = score;
-    }
-
-    // ============== 主迴圈 ==============
-    function loop(now) {
-      if (!running && !gameOver) return;
-      updateFlying();
-      updateParticles();
+  function loop(now) {
+    try {
       if (running && !gameOver) {
-        dropRows(now);
+        updateFlying();
+        updateParticles();
+        maybeDrop(now);
+      } else {
+        updateParticles();
       }
       draw();
-      animId = requestAnimationFrame(loop);
+    } catch (err) {
+      console.error(err);
     }
+    animId = requestAnimationFrame(loop);
+  }
 
-    // 啟動
-    init();
-  </script>
+  init();
+})();
+</script>
 </body>
 </html>
